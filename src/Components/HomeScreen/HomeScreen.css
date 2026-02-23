@@ -1,0 +1,55 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #060553;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.button.active-confirm {
+  background-color: #0b6ceb;
+}
+
+.button.active-decline {
+  background-color: #6b0200;
+}
+
+.submit-button {
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #0e365e;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.change-option-button {
+  align-self: center;
+  background: transparent;
+  border: none;
+  color: #1d4e89;
+  font-size: 14px;
+  text-decoration: underline;
+  padding: 0;
+}

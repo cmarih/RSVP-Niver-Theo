@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(4, 31, 63, 0.87);
+  background-color: transparent;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+html,
+body {
+  height: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #090a0f;
+  background-image: url('/img/fundo-2.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+.app-container {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 16px;
+}
+
+.page-brand {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 2vw, 18px);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.page-logo {
+  width: clamp(120px, 24vw, 220px);
+  height: auto;
+  mix-blend-mode: multiply;
+  filter: hue-rotate(170deg) saturate(1.35) brightness(1.1) contrast(1.08);
+}
+
+.page-astro {
+  width: clamp(48px, 9vw, 84px);
+  height: auto;
+  object-fit: contain;
+}
+
+.card h1 {
+  font-family: "Audiowide", system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.card-icon {
+  width: 224px;
+  height: 224px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 12px;
+}
+
+.card {
+  background: white;
+  backdrop-filter: blur(8px);
+  width: 100%;
+  max-width: 420px;
+  margin-top: 0;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.fade {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+@media (max-width: 480px) {
+  .app-container {
+    gap: 26px;
+  }
+
+  .page-logo {
+    width: clamp(110px, 38vw, 160px);
+  }
+
+  .page-astro {
+    width: clamp(42px, 14vw, 62px);
+  }
+
+  .card-icon {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 8px;
+  }
+
+  .card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .card h1 {
+    font-size: 18px;
+  }
+
+  .button,
+  .submit-button {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 768px) {
+  .card {
+    max-width: 500px;
+  }
+}

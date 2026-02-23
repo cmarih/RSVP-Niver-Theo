@@ -1,0 +1,17 @@
+.confirmed-content {
+  text-align: center;
+}
+
+.confirmed-title {
+  font-family: "Audiowide", system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.confirmed-details {
+  margin-bottom: 16px;
+}
+
+.confirmed-agenda-button {
+  margin-top: 4px;
+}
