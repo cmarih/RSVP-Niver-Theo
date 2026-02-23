@@ -23,6 +23,16 @@ A ideia principal é usar este projeto para praticar React, construindo uma expe
 - Layout responsivo para desktop e mobile.
 - Identidade visual com tema Astro Bot.
 
+### Prints do fluxo
+
+- Fluxo de presença confirmada:
+
+![Tela de presença confirmada](./public/img/confirmed.png)
+
+- Fluxo de ausência (não poderei ir):
+
+![Tela de ausência](./public/img/declined.png)
+
 ## Stack técnica
 
 - React
