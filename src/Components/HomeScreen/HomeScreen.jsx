@@ -2,6 +2,92 @@ import { useState, useEffect } from "react"
 import "./HomeScreen.css"
 import { supabase } from "../../lib/supabaseClient"
 
+const PENDING_RSVPS_KEY = "pending-rsvps"
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function getPendingRsvps() {
+  try {
+    const rawValue = localStorage.getItem(PENDING_RSVPS_KEY)
+    return rawValue ? JSON.parse(rawValue) : []
+  } catch {
+    return []
+  }
+}
+
+function savePendingRsvps(items) {
+  localStorage.setItem(PENDING_RSVPS_KEY, JSON.stringify(items))
+}
+
+function enqueuePendingRsvp(data) {
+  const queue = getPendingRsvps()
+  queue.push({
+    id: Date.now(),
+    ...data
+  })
+  savePendingRsvps(queue)
+}
+
+function removePendingRsvpById(id) {
+  const queue = getPendingRsvps().filter((item) => item.id !== id)
+  savePendingRsvps(queue)
+}
+
+async function insertRsvpWithRetry(data, maxAttempts = 3) {
+  const payload = {
+    name: data.name,
+    will_attend: data.willAttend,
+    adults_guests: data.adults,
+    children_guests: data.children,
+    guests: data.guests
+  }
+
+  let lastError = null
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("timeout")), 12000)
+      })
+
+      const requestPromise = supabase.from("rsvps").insert(payload).select()
+
+      const result = await Promise.race([requestPromise, timeoutPromise])
+
+      if (result.error) {
+        throw result.error
+      }
+
+      return result.data
+    } catch (error) {
+      lastError = error
+
+      const message = String(error?.message || "").toLowerCase()
+      const isDuplicate = error?.code === "23505" || message.includes("duplicate")
+
+      if (isDuplicate) {
+        return []
+      }
+
+      const isRetryable =
+        message.includes("timeout") ||
+        message.includes("network") ||
+        message.includes("fetch") ||
+        message.includes("failed")
+
+      if (!isRetryable || attempt === maxAttempts) {
+        break
+      }
+
+      await wait(900 * attempt)
+    }
+  }
+
+  throw lastError
+}
+
 function HomeScreen({ setStatus, setFormData }) {
   const [name, setName] = useState("")
   const [willAttend, setWillAttend] = useState(null)
@@ -9,8 +95,26 @@ function HomeScreen({ setStatus, setFormData }) {
   const [childGuests, setChildGuests] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState("")
+  const [submitInfo, setSubmitInfo] = useState("")
   const [existingRsvp, setExistingRsvp] = useState(null)
   const [isCheckingExisting, setIsCheckingExisting] = useState(false)
+
+  async function syncPendingRsvps() {
+    const queue = getPendingRsvps()
+
+    if (!queue.length || !navigator.onLine) {
+      return
+    }
+
+    for (const item of queue) {
+      try {
+        await insertRsvpWithRetry(item, 2)
+        removePendingRsvpById(item.id)
+      } catch {
+        return
+      }
+    }
+  }
 
   async function checkExistingRsvp(nameToCheck) {
     if (!nameToCheck.trim()) return
@@ -85,6 +189,7 @@ function HomeScreen({ setStatus, setFormData }) {
   async function handleSubmit(e) {
     e.preventDefault()
     setSubmitError("")
+    setSubmitInfo("")
 
     // Não permitir submit se já existe confirmação
     if (existingRsvp) {
@@ -108,37 +213,7 @@ function HomeScreen({ setStatus, setFormData }) {
     setIsSubmitting(true)
 
     try {
-      // Apenas INSERT - sem UPDATE
-      const result = await supabase
-        .from("rsvps")
-        .insert({
-          name: data.name,
-          will_attend: data.willAttend,
-          adults_guests: data.adults,
-          children_guests: data.children,
-          guests: data.guests
-        })
-        .select()
-
-      if (result.error) {
-        console.error("Erro no Supabase:", result.error)
-        setIsSubmitting(false)
-        
-        let errorMessage = "Não foi possível salvar sua resposta. "
-        
-        if (result.error.code === '23505' || result.error.message.includes('duplicate')) {
-          errorMessage = `${data.name} foi usado para confirmar presença anteriormente.`
-        } else if (result.error.message.includes('policy')) {
-          errorMessage = "Erro de permissão. Entre em contato para suporte."
-        } else {
-          errorMessage += "Tente novamente."
-        }
-        
-        setSubmitError(errorMessage)
-        return
-      }
-
-      console.log("RSVP salvo com sucesso:", result.data)
+      await insertRsvpWithRetry(data)
       setFormData(data)
       setIsSubmitting(false)
 
@@ -150,8 +225,24 @@ function HomeScreen({ setStatus, setFormData }) {
       
     } catch (error) {
       console.error("Erro inesperado:", error)
+      const message = String(error?.message || "").toLowerCase()
+
+      const isConnectionError =
+        !navigator.onLine ||
+        message.includes("timeout") ||
+        message.includes("network") ||
+        message.includes("fetch") ||
+        message.includes("failed")
+
+      if (isConnectionError) {
+        enqueuePendingRsvp(data)
+        setIsSubmitting(false)
+        setSubmitInfo("Conexão instável: sua resposta foi guardada no aparelho e será reenviada quando a internet voltar.")
+        return
+      }
+
       setIsSubmitting(false)
-      setSubmitError("Erro de conexão. Verifique sua internet e tente novamente.")
+      setSubmitError("Não foi possível salvar sua resposta agora. Tente novamente.")
     }
   }
 
@@ -167,6 +258,25 @@ function HomeScreen({ setStatus, setFormData }) {
 
     return () => clearTimeout(timeoutId)
   }, [name])
+
+  useEffect(() => {
+    syncPendingRsvps()
+
+    const handleOnline = async () => {
+      await syncPendingRsvps()
+      const pendingCount = getPendingRsvps().length
+
+      if (pendingCount === 0) {
+        setSubmitInfo("Conexão restabelecida: respostas pendentes enviadas com sucesso.")
+      }
+    }
+
+    window.addEventListener("online", handleOnline)
+
+    return () => {
+      window.removeEventListener("online", handleOnline)
+    }
+  }, [])
 
   const isNameFilled = name.trim() !== ""
   const totalGuests = Number(adultGuests || 0) + Number(childGuests || 0)
@@ -296,6 +406,9 @@ function HomeScreen({ setStatus, setFormData }) {
         <button type="submit" className="submit-button" disabled={isSubmitting}>
           {isSubmitting ? "Enviando..." : "Enviar"}
         </button>
+        {submitInfo && (
+          <p className="submit-info">{submitInfo}</p>
+        )}
         {submitError && (
           <p className="submit-error">{submitError}</p>
         )}

@@ -62,6 +62,13 @@
   margin-top: -6px;
 }
 
+.submit-info {
+  color: #0f5a9d;
+  font-size: 14px;
+  text-align: center;
+  margin-top: -6px;
+}
+
 .change-option-button {
   align-self: center;
   background: transparent;
@@ -163,7 +170,8 @@
 
   .change-option-button,
   .checking-existing,
-  .submit-error {
+  .submit-error,
+  .submit-info {
     font-size: 12px;
   }
 
