@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
-import HomeScreen from "/src/components/HomeScreen/HomeScreen"
-import ConfirmedScreen from "/src/components/ConfirmedScreen/ConfirmedScreen"
-import DeclinedScreen from "/src/components/DeclinedScreen/DeclinedScreen"
+import HomeScreen from "./Components/HomeScreen/HomeScreen"
+import ConfirmedScreen from "./Components/ConfirmedScreen/ConfirmedScreen"
+import DeclinedScreen from "./Components/DeclinedScreen/DeclinedScreen"
 import "./App.css"
 
 function App() {
