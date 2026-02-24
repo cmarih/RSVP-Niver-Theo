@@ -1,21 +1,42 @@
 import { useState } from "react"
 import "./HomeScreen.css"
+import { supabase } from "../../lib/supabaseClient"
 
 function HomeScreen({ setStatus, setFormData }) {
   const [name, setName] = useState("")
   const [willAttend, setWillAttend] = useState(null)
   const [guests, setGuests] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState("")
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
+    setSubmitError("")
 
     const data = {
-      name,
+      name: name.trim(),
       willAttend,
       guests: willAttend ? Number(guests) : 0
     }
 
+    setIsSubmitting(true)
+
+    const { error } = await supabase
+      .from("rsvps")
+      .insert({
+        name: data.name,
+        will_attend: data.willAttend,
+        guests: data.guests
+      })
+
+    if (error) {
+      setIsSubmitting(false)
+      setSubmitError("Não foi possível salvar sua resposta. Tente novamente.")
+      return
+    }
+
     setFormData(data)
+    setIsSubmitting(false)
 
     if (willAttend) {
       setStatus("confirmed")
@@ -94,9 +115,14 @@ function HomeScreen({ setStatus, setFormData }) {
     )}
 
     {shouldShowSubmit && (
-      <button type="submit" className="submit-button">
-        Enviar
-      </button>
+      <>
+        <button type="submit" className="submit-button" disabled={isSubmitting}>
+          {isSubmitting ? "Enviando..." : "Enviar"}
+        </button>
+        {submitError && (
+          <p className="submit-error">{submitError}</p>
+        )}
+      </>
     )}
   </form>
 )

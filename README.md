@@ -38,6 +38,7 @@ A ideia principal é usar este projeto para praticar React, construindo uma expe
 - React
 - Vite
 - JavaScript (ESM)
+- Supabase
 - CSS modular por componente + estilos globais
 
 ## Estrutura principal
@@ -46,7 +47,46 @@ A ideia principal é usar este projeto para praticar React, construindo uma expe
 - src/Components/HomeScreen: formulário principal
 - src/Components/ConfirmedScreen: retorno para presença confirmada
 - src/Components/DeclinedScreen: retorno para ausência
+- src/lib/supabaseClient.js: cliente de conexão com o Supabase
 - src/index.css: estilos globais e layout base
+
+## Configuração do Supabase
+
+1. Crie um projeto no [Supabase](https://supabase.com).
+
+2. No SQL Editor, crie a tabela `rsvps`:
+
+```sql
+create table if not exists public.rsvps (
+	id bigint generated always as identity primary key,
+	name text not null,
+	will_attend boolean not null,
+	guests integer not null default 0,
+	created_at timestamp with time zone default now()
+);
+```
+
+3. Ative RLS e permita inserção pública (apenas para este formulário):
+
+```sql
+alter table public.rsvps enable row level security;
+
+create policy "Permitir inserção anônima no RSVP"
+on public.rsvps
+for insert
+to anon
+with check (true);
+```
+
+4. Copie `.env.example` para `.env` e preencha:
+
+```bash
+VITE_SUPABASE_URL=https://SEU-PROJETO.supabase.co
+VITE_SUPABASE_ANON_KEY=SUA_ANON_KEY
+```
+
+5. Na Vercel, configure as mesmas variáveis em:
+`Project Settings > Environment Variables`.
 
 ## Como rodar localmente
 
@@ -65,7 +105,6 @@ A ideia principal é usar este projeto para praticar React, construindo uma expe
 ## Próximos passos
 
 - Disponibilizar o formulário em um servidor para os convidados responderem.
-- Integrar com banco de dados para armazenar respostas em tempo real.
 - Criar um painel simples para acompanhar:
 	- total de confirmados
 	- total de recusas
