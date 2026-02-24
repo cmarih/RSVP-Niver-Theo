@@ -35,10 +35,6 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #090a0f;
-  background-image: url('/img/fundo-2.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
@@ -46,11 +42,36 @@ body {
 
 body::before {
   content: "";
-  position: absolute;
+  position: fixed;
+  inset: 0;
+  background-image: url('/img/fundo-2.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: scale(1);
+  transform-origin: center center;
+  animation: bg-zoom-smooth 22s ease-in-out infinite alternate;
+  will-change: transform;
+  pointer-events: none;
+  z-index: -1;
+}
+
+body::after {
+  content: "";
+  position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
   pointer-events: none;
   z-index: 0;
+}
+
+@keyframes bg-zoom-smooth {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.15);
+  }
 }
 
 #root {
@@ -98,6 +119,12 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
   }
 }
 .app-container {
