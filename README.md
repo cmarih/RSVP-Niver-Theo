@@ -7,7 +7,7 @@ Sistema completo de RSVP com prevenção de duplicatas, validações de seguran�
 ## 🎯 Objetivo
 
 - Permitir que os convidados confirmem presença **apenas uma vez** por nome
-- Registrar quem vai comparecer e quantos acompanhantes irão
+- Registrar quem vai comparecer, separando quantos adultos e crianças irão
 - Registrar também quem não poderá ir
 
 ## ✨ Funcionalidades Implementadas
@@ -19,7 +19,7 @@ Sistema completo de RSVP com prevenção de duplicatas, validações de seguran�
 
 ### 🛡️ **Segurança e Validação**
 - **Políticas RLS restritivas** no Supabase para ambiente de produção
-- **Validação de entrada**: Nome (2-100 chars), acompanhantes (1-10), caracteres seguros
+- **Validação de entrada**: Nome (2-100 chars), adultos/crianças (0-4 cada, total 1-4), caracteres seguros
 - **Proteção contra spam**: Debounce de 800ms nas consultas
 - **Sistema apenas de inserção**: Não permite alterações após confirmação
 
@@ -28,12 +28,14 @@ Sistema completo de RSVP com prevenção de duplicatas, validações de seguran�
 - **Mensagens claras**: "Nome já confirmou presença" com detalhes
 - **Botões padronizados**: "Voltar ao início" presente em todas as telas
 - **Design responsivo**: Funciona perfeitamente em mobile e desktop
+- **Formulário de acompanhantes separado**: campos independentes para adultos e crianças
+- **Mobile compacto**: ajustes específicos para telas pequenas (ex.: 375x667)
 
 ### 📱 **Fluxos de Experiência**
 
 #### 1️⃣ **Primeira confirmação:**
 ```
-Digite nome → Não existe → Escolha presença → Confirma acompanhantes → Sucesso
+Digite nome → Não existe → Escolha presença → Confirma adultos/crianças → Sucesso
 ```
 
 #### 2️⃣ **Nome já confirmado:**
@@ -49,10 +51,19 @@ Tela de sucesso → Adicionar na agenda → Voltar ao início
 ### 🎉 **Funcionalidades da Interface**
 - Tela inicial com validação em tempo real
 - Fluxo condicional baseado na resposta
+- Campo de acompanhantes dividido em:
+  - quantidade de adultos
+  - quantidade de crianças
 - Tela de confirmação com opção de adicionar evento na agenda (.ics para desktop, Google Calendar para mobile)
 - Tela de recusa com feedback amigável
 - Layout responsivo com identidade visual Astro Bot
 - Animações suaves entre transições
+
+### 📐 **Ajustes recentes de layout (mobile)**
+- Scroll vertical habilitado em telas menores para evitar corte de conteúdo
+- Redução de espaçamento/padding de cards e formulário no mobile
+- Breakpoint adicional para dispositivos pequenos (`max-width: 390px` e `max-height: 700px`)
+- Redução proporcional de logo, ícone, título e campos para melhor encaixe visual
 
 ## 🏗️ Stack Técnica
 
@@ -87,6 +98,8 @@ CREATE TABLE IF NOT EXISTS public.rsvps (
   id BIGSERIAL PRIMARY KEY,
   name TEXT NOT NULL,
   will_attend BOOLEAN NOT NULL,
+  adults_guests INTEGER DEFAULT 0,
+  children_guests INTEGER DEFAULT 0,
   guests INTEGER DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -99,7 +112,15 @@ ON rsvps (LOWER(TRIM(name)));
 -- Constraints de validação
 ALTER TABLE rsvps 
 ADD CONSTRAINT check_name_length CHECK (LENGTH(TRIM(name)) >= 2 AND LENGTH(TRIM(name)) <= 100),
-ADD CONSTRAINT check_guests_limit CHECK (guests >= 0 AND guests <= 10);
+ADD CONSTRAINT check_adults_guests_limit CHECK (adults_guests >= 0 AND adults_guests <= 4),
+ADD CONSTRAINT check_children_guests_limit CHECK (children_guests >= 0 AND children_guests <= 4),
+ADD CONSTRAINT check_guests_limit CHECK (guests >= 0 AND guests <= 4);
+
+-- Se a tabela já existia antes dessa versão, rode também:
+ALTER TABLE rsvps ADD COLUMN IF NOT EXISTS adults_guests INTEGER DEFAULT 0;
+ALTER TABLE rsvps ADD COLUMN IF NOT EXISTS children_guests INTEGER DEFAULT 0;
+UPDATE rsvps SET adults_guests = guests WHERE adults_guests IS NULL;
+UPDATE rsvps SET children_guests = 0 WHERE children_guests IS NULL;
 ```
 
 ### 2️⃣ **Configurar políticas RLS de segurança:**
@@ -122,8 +143,12 @@ CREATE POLICY "allow_insert_rsvps" ON rsvps FOR INSERT WITH CHECK (
   AND LENGTH(TRIM(name)) >= 2
   AND LENGTH(TRIM(name)) <= 100
   AND will_attend IS NOT NULL
+  AND adults_guests >= 0
+  AND adults_guests <= 4
+  AND children_guests >= 0
+  AND children_guests <= 4
   AND guests >= 0
-  AND guests <= 10
+  AND guests <= 4
 );
 
 -- SEM UPDATE/DELETE públicos (apenas service_role para admin)
@@ -177,14 +202,14 @@ npm run preview
 - Políticas RLS restritivas
 
 ### **✅ Validação de Dados**
-- Frontend: Tamanho, caracteres, números
+- Frontend: Tamanho, caracteres, números e total de acompanhantes (adultos + crianças)
 - Backend: Constraints, políticas, tipos
 - Sanitização automática (TRIM)
 
 ### **✅ Proteção contra Abuso**
 - Rate limiting via debounce
 - Validação de caracteres suspeitos
-- Limites de acompanhantes (1-10)
+- Limites de acompanhantes por tipo (adultos/crianças) com total de 1-4
 - Apenas inserção (sem updates públicos)
 
 ### **✅ Experiência Segura**
@@ -214,131 +239,6 @@ Na aba **Table Editor** → **rsvps**:
 - **Busca em tempo real** 
 - **Visualização clara** de quem confirmou/recusou
 
-### 📊 **Relatórios Instantâneos**
-
-#### **1️⃣ Estatísticas Rápidas (SQL Editor)**
-```sql
--- Resumo geral das confirmações
-SELECT 
-  COUNT(*) FILTER (WHERE will_attend = true) as "✅ Confirmados",
-  COUNT(*) FILTER (WHERE will_attend = false) as "❌ Não vão",
-  SUM(guests) FILTER (WHERE will_attend = true) as "👥 Total Pessoas",
-  COUNT(*) as "📋 Total Respostas"
-FROM rsvps;
-```
-
-#### **2️⃣ Lista Detalhada dos Confirmados**
-```sql
--- Todos que confirmaram presença
-SELECT 
-  name as "Nome",
-  guests as "Acompanhantes", 
-  (guests + 1) as "Total na Mesa",
-  created_at as "Confirmou em"
-FROM rsvps 
-WHERE will_attend = true 
-ORDER BY created_at DESC;
-```
-
-#### **3️⃣ Confirmações por Período**
-```sql
--- Confirmações por dia
-SELECT 
-  DATE(created_at) as "Data",
-  COUNT(*) as "Confirmações do Dia",
-  SUM(guests + 1) FILTER (WHERE will_attend = true) as "Pessoas Confirmadas"
-FROM rsvps 
-GROUP BY DATE(created_at)
-ORDER BY DATE(created_at) DESC;
-```
-
-### 📥 **Exportar Dados**
-
-#### **Através do Dashboard:**
-1. **Table Editor** → **rsvps**
-2. **Botão "Export"** → **CSV/Excel**
-3. **Filtrar dados** se necessário
-4. **Download automático**
-
-#### **Lista para Impressão:**
-```sql
--- Lista limpa para imprimir
-SELECT 
-  ROW_NUMBER() OVER (ORDER BY name) as "#",
-  name as "Nome do Convidado",
-  CASE 
-    WHEN will_attend THEN '✅ Confirmado (' || (guests + 1) || ' pessoas)'
-    ELSE '❌ Não comparecerá'
-  END as "Status"
-FROM rsvps 
-ORDER BY will_attend DESC, name ASC;
-```
-
-### 📱 **Dashboard Mobile-Friendly**
-
-O Supabase funciona perfeitamente no celular:
-- **App móvel** ou **browser mobile**
-- **Notificações em tempo real** (configurável)
-- **Acesso rápido** às estatísticas
-- **Compartilhamento** de relatórios
-
-### ⚡ **Vantagens do Dashboard Supabase**
-
-✅ **Sem código extra**: Funciona imediatamente  
-✅ **Tempo real**: Atualizações automáticas  
-✅ **Seguro**: Mesmo nível de segurança da aplicação  
-✅ **Completo**: Filtros, busca, exportação  
-✅ **Gratuito**: Incluído no plano free  
-✅ **Colaborativo**: Pode dar acesso a outros organized  
-
-### 🔐 **Compartilhar Acesso (Opcional)**
-
-Para dar acesso a outros organizadores:
-1. **Project Settings** → **Team** 
-2. **Invite member** 
-3. **Escolher permissão**: `Read-only` ou `Full access`
-4. **Pessoa recebe email** com convite
-
-### 🤖 **Automações Avançadas (Opcional)**
-
-O Supabase permite automações poderosas via **Database Webhooks**:
-
-#### **Notificação a cada confirmação:**
-```sql
--- Trigger para webhook a cada nova confirmação
-CREATE OR REPLACE FUNCTION notify_new_rsvp()
-RETURNS TRIGGER AS $$
-BEGIN
-  -- Payload enviado para webhook
-  PERFORM net.http_post(
-    url := 'https://seu-webhook-url.com/nova-confirmacao',
-    headers := '{"Content-Type": "application/json"}'::jsonb,
-    body := jsonb_build_object(
-      'nome', NEW.name,
-      'comparecera', NEW.will_attend,
-      'acompanhantes', NEW.guests,
-      'total_pessoas', NEW.guests + 1,
-      'data_confirmacao', NEW.created_at
-    )
-  );
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Ativar trigger
-CREATE TRIGGER rsvp_notification_trigger
-  AFTER INSERT ON rsvps
-  FOR EACH ROW
-  EXECUTE FUNCTION notify_new_rsvp();
-```
-
-**Onde usar:**
-- **WhatsApp Business API** para notificações
-- **Email automático** para organizadores  
-- **Slack/Discord** para equipe do evento
-- **Planilha Google** auto-atualizada
-
----
 
 ## 📊 Próximos Passos (Pós-Deploy)
 
@@ -362,7 +262,6 @@ CREATE TRIGGER rsvp_notification_trigger
 - [ ] ✅ Build testado localmente
 - [ ] ✅ Domínio/URL de produção configurado
 - [ ] ✅ Teste de fluxo completo em produção
-- [ ] ✅ Backup das configurações do Supabase
 
 ---
 

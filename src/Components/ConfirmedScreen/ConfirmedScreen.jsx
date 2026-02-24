@@ -19,7 +19,9 @@ function ConfirmedScreen({ data }) {
       {data && (
         <div className="confirmed-details">
           <p>Nome: {data.name}</p>
-          <p>Acompanhantes: {data.guests}</p>
+          <p>Adultos: {data.adults ?? data.guests ?? 0}</p>
+          <p>Crianças: {data.children ?? 0}</p>
+          <p>Total de acompanhantes: {data.guests ?? 0}</p>
         </div>
       )}
 

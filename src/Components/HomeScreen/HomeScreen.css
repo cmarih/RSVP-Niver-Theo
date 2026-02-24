@@ -11,6 +11,12 @@
   border: 1px solid #ccc;
 }
 
+.guests-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
 .button-group {
   display: flex;
   flex-direction: column;
@@ -28,17 +34,17 @@
 }
 
 .button.active-confirm {
-  background-color: #0b6ceb;
+  background-color: #1d5bac;
 }
 
 .button.active-decline {
-  background-color: #6b0200;
+  background-color: #b46103;
 }
 
 .submit-button {
   padding: 12px;
   border-radius: 8px;
-  background-color: #0e365e;
+  background-color: #155697;
   color: white;
   border: none;
   cursor: pointer;
@@ -87,6 +93,7 @@
   font-weight: 600;
   margin: 0 0 10px 0;
   text-align: center;
+  word-break: break-word;
 }
 
 .existing-details {
@@ -115,4 +122,60 @@
   background-color: #FFF8DC;
   border-radius: 4px;
   border-left: 3px solid #DAA520;
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    gap: 12px;
+  }
+
+  .existing-rsvp-info {
+    padding: 12px;
+    margin: 8px 0;
+  }
+
+  .existing-details {
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  .existing-details p {
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .go-back-button {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 390px) and (max-height: 700px) {
+  .form-container {
+    gap: 10px;
+  }
+
+  .input,
+  .button,
+  .submit-button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .change-option-button,
+  .checking-existing,
+  .submit-error {
+    font-size: 12px;
+  }
+
+  .existing-rsvp-info {
+    padding: 10px;
+  }
+
+  .existing-rsvp-message {
+    font-size: 16px;
+  }
+
+  .existing-details p {
+    font-size: 12px;
+  }
 }

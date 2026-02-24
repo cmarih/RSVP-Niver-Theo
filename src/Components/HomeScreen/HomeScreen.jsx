@@ -5,7 +5,8 @@ import { supabase } from "../../lib/supabaseClient"
 function HomeScreen({ setStatus, setFormData }) {
   const [name, setName] = useState("")
   const [willAttend, setWillAttend] = useState(null)
-  const [guests, setGuests] = useState("")
+  const [adultGuests, setAdultGuests] = useState("")
+  const [childGuests, setChildGuests] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState("")
   const [existingRsvp, setExistingRsvp] = useState(null)
@@ -29,7 +30,8 @@ function HomeScreen({ setStatus, setFormData }) {
         setExistingRsvp(data)
         // Bloquear o formulário se já existe confirmação
         setWillAttend(null)
-        setGuests("")
+        setAdultGuests("")
+        setChildGuests("")
       } else {
         setExistingRsvp(null)
       }
@@ -54,9 +56,20 @@ function HomeScreen({ setStatus, setFormData }) {
       return false
     }
     
-    if (willAttend === true && (Number(guests) < 1 || Number(guests) > 4)) {
-      setSubmitError("Número de pessoas deve estar entre 1 e 4.")
-      return false
+    if (willAttend === true) {
+      const adults = Number(adultGuests || 0)
+      const children = Number(childGuests || 0)
+      const totalGuests = adults + children
+
+      if (adults < 0 || children < 0) {
+        setSubmitError("As quantidades de adultos e crianças não podem ser negativas.")
+        return false
+      }
+
+      if (totalGuests < 1 || totalGuests > 4) {
+        setSubmitError("Total de acompanhantes (adultos + crianças) deve estar entre 1 e 4.")
+        return false
+      }
     }
     
     // Verificar caracteres suspeitos (básico)
@@ -87,7 +100,9 @@ function HomeScreen({ setStatus, setFormData }) {
     const data = {
       name: name.trim(),
       willAttend,
-      guests: willAttend ? Number(guests) : 0
+      adults: willAttend ? Number(adultGuests || 0) : 0,
+      children: willAttend ? Number(childGuests || 0) : 0,
+      guests: willAttend ? Number(adultGuests || 0) + Number(childGuests || 0) : 0
     }
 
     setIsSubmitting(true)
@@ -99,6 +114,8 @@ function HomeScreen({ setStatus, setFormData }) {
         .insert({
           name: data.name,
           will_attend: data.willAttend,
+          adults_guests: data.adults,
+          children_guests: data.children,
           guests: data.guests
         })
         .select()
@@ -152,7 +169,8 @@ function HomeScreen({ setStatus, setFormData }) {
   }, [name])
 
   const isNameFilled = name.trim() !== ""
-  const isGuestsValid = Number(guests) > 0
+  const totalGuests = Number(adultGuests || 0) + Number(childGuests || 0)
+  const isGuestsValid = totalGuests > 0 && totalGuests <= 4
   const hasExistingRsvp = existingRsvp !== null
 
   const shouldShowSubmit =
@@ -186,7 +204,11 @@ function HomeScreen({ setStatus, setFormData }) {
         <div className="existing-details">
           <p>Resposta: <strong>{existingRsvp.will_attend ? 'Presença confirmada' : 'Não poderá ir'}</strong></p>
           {existingRsvp.will_attend && (
-            <p>Acompanhantes: <strong>{existingRsvp.guests}</strong></p>
+            <>
+              <p>Adultos: <strong>{existingRsvp.adults_guests ?? existingRsvp.guests ?? 0}</strong></p>
+              <p>Crianças: <strong>{existingRsvp.children_guests ?? 0}</strong></p>
+              <p>Total de acompanhantes: <strong>{(existingRsvp.adults_guests ?? existingRsvp.guests ?? 0) + (existingRsvp.children_guests ?? 0)}</strong></p>
+            </>
           )}
           <p className="no-change-message">
             ❌ Para alterar a confirmação, entre em contato conosco.
@@ -231,16 +253,28 @@ function HomeScreen({ setStatus, setFormData }) {
     )}
 
     {willAttend === true && !hasExistingRsvp && (
-      <input
-        type="number"
-        placeholder="Quantas pessoas irão?"
-        value={guests}
-        onChange={(e) => setGuests(e.target.value)}
-        className="input"
-        min="1"
-        max="4"
-        required
-      />
+      <div className="guests-grid">
+        <input
+          type="number"
+          placeholder="Qtd. adultos"
+          value={adultGuests}
+          onChange={(e) => setAdultGuests(e.target.value)}
+          className="input"
+          min="0"
+          max="4"
+          required
+        />
+        <input
+          type="number"
+          placeholder="Qtd. crianças"
+          value={childGuests}
+          onChange={(e) => setChildGuests(e.target.value)}
+          className="input"
+          min="0"
+          max="4"
+          required
+        />
+      </div>
     )}
 
     {willAttend !== null && !hasExistingRsvp && (
@@ -249,7 +283,8 @@ function HomeScreen({ setStatus, setFormData }) {
         className="change-option-button"
         onClick={() => {
           setWillAttend(null)
-          setGuests("")
+          setAdultGuests("")
+          setChildGuests("")
         }}
       >
         Alterar resposta

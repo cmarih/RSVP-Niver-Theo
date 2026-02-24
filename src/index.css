@@ -39,7 +39,8 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   position: relative;
 }
 
@@ -192,8 +193,18 @@ button:focus-visible {
 
 
 @media (max-width: 480px) {
+  body {
+    align-items: flex-start;
+  }
+
+  #root {
+    align-items: flex-start;
+  }
+
   .app-container {
-    gap: 26px;
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 12px;
   }
 
   .page-logo {
@@ -216,7 +227,7 @@ button:focus-visible {
   }
 
   .card {
-    padding: 20px;
+    padding: 16px;
     border-radius: 16px;
   }
 
@@ -227,6 +238,43 @@ button:focus-visible {
   .button,
   .submit-button {
     font-size: 14px;
+  }
+}
+
+@media (max-width: 390px) and (max-height: 700px) {
+  .app-container {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .page-logo {
+    width: 150px;
+  }
+
+  .page-astro {
+    width: 52px;
+  }
+
+  .card {
+    max-width: 340px;
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .card-icon {
+    width: 86px;
+    height: 86px;
+    margin-bottom: 6px;
+  }
+
+  .card-name {
+    width: 92px;
+    margin-bottom: 14px;
+  }
+
+  .card h1 {
+    font-size: 16px;
+    margin-bottom: 14px;
   }
 }
 
