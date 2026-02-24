@@ -27,3 +27,15 @@
     height: 128px;
   }
 }
+
+.declined-details {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.update-message {
+  color: #0b6ceb;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+}

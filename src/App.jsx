@@ -34,7 +34,7 @@ function App() {
       </div>
 
       <div className={`card ${animate ? "fade" : ""}`}>
-        {status !== "declined" && (
+        {status === "idle" && (
           <>
             <img
               src="/img/icone.png"

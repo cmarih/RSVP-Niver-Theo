@@ -175,6 +175,21 @@ button:focus-visible {
   opacity: 0;
   transform: translateY(10px);
 }
+.back-button {
+  margin-top: 16px;
+  padding: 10px 20px;
+  background-color: #1d4e89 ;
+  color: #1d4e89;
+  border: 2px solid #1d4e89;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+}
+
 
 @media (max-width: 480px) {
   .app-container {

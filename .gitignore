@@ -7,19 +7,116 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependencies
+node_modules/
+jspm_packages/
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+out/
+
+# Environment variables (CRÍTICO - credenciais Supabase)
 .env
-.env.*
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+*.env
 !.env.example
+
+# Supabase (se usar CLI local)
+supabase/.branches/
+supabase/.temp/
+supabase/logs/
+
+# Cache directories
+.npm
+.eslintcache
+.parcel-cache
+.next/
+.nuxt/
+.cache/
+.vite/
+.turbo/
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+.nyc_output
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Windows
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Runtime files
+*.tsbuildinfo
+*.local
+
+# Package files
+*.tgz
+*.tar.gz
+
+# Temporary folders
+tmp/
+temp/
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Deploy keys/certificates (SEGURANÇA)
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Analytics and monitoring
+.vercel
+.netlify
+
+# Local database files (se usar SQLite local)
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
 *.suo
 *.ntvs*
 *.njsproj

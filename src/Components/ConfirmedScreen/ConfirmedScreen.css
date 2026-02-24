@@ -1,5 +1,8 @@
 .confirmed-content {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .confirmed-title {
@@ -13,5 +16,16 @@
 }
 
 .confirmed-agenda-button {
-  margin-top: 4px;
+  margin-top: 16px;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+}
+
+.update-message {
+  color: #0b6ceb;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
 }

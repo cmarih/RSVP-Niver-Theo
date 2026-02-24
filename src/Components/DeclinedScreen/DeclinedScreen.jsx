@@ -1,6 +1,10 @@
 import "./DeclinedScreen.css"
 
-function DeclinedScreen() {
+function DeclinedScreen({ data }) {
+  const handleGoBack = () => {
+    window.location.reload()
+  }
+
   return (
     <div className="declined-content">
       <img
@@ -8,7 +12,13 @@ function DeclinedScreen() {
         alt="Astro Bot triste"
         className="declined-image"
       />
-      <h2 className="declined-title">Sentiremos sua falta</h2>
+      <h2 className="declined-title">
+        Sentiremos sua falta
+      </h2>
+      
+      <button onClick={handleGoBack} className="go-back-button">
+        🏠 Voltar ao início
+      </button>
     </div>
   )
 }

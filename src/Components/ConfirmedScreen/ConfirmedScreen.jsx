@@ -1,9 +1,20 @@
 import "./ConfirmedScreen.css"
 
 function ConfirmedScreen({ data }) {
+  const handleGoBack = () => {
+    window.location.reload()
+  }
+
   return (
     <div className="confirmed-content">
-      <h2 className="confirmed-title">Presença confirmada! 🎉</h2>
+      <img
+        src="/img/avatar.png"
+        alt="Avatar Théo"
+        className="declined-image"
+      />
+      <h2 className="confirmed-title">
+        Presença confirmada! 🎉
+      </h2>
 
       {data && (
         <div className="confirmed-details">
@@ -14,6 +25,10 @@ function ConfirmedScreen({ data }) {
 
       <button onClick={handleAddToCalendar} className="submit-button confirmed-agenda-button">
         Adicionar na agenda 📅
+      </button>
+      
+      <button onClick={handleGoBack} className="go-back-button">
+        🏠 Voltar ao início
       </button>
     </div>
   )

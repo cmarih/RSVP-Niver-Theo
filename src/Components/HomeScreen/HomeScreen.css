@@ -65,3 +65,54 @@
   text-decoration: underline;
   padding: 0;
 }
+
+.checking-existing {
+  color: #1d4e89;
+  font-size: 14px;
+  text-align: center;
+  margin: -6px 0;
+  font-style: italic;
+}
+
+.existing-rsvp-info {
+  background-color: #f0f8ff;
+  border: 2px solid #1d4e89;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 10px 0;
+}
+
+.existing-rsvp-message {
+  color: #1379f7;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+.existing-details {
+  background-color: white;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 12px;
+}
+
+.existing-details p {
+  margin: 4px 0;
+  color: #313131;
+  font-size: 14px;
+}
+
+.existing-details strong {
+  color: #056ff0;
+}
+
+.no-change-message {
+  color: #8B5A00;
+  font-size: 13px;
+  font-style: italic;
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #FFF8DC;
+  border-radius: 4px;
+  border-left: 3px solid #DAA520;
+}
