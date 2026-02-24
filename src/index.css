@@ -150,6 +150,14 @@ button:focus-visible {
   margin: 0 auto 12px;
 }
 
+.card-name {
+  width: clamp(80px, 22vw, 120px);
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 22px;
+}
+
 .card {
   background: white;
   backdrop-filter: blur(8px);
@@ -185,6 +193,11 @@ button:focus-visible {
     width: 100px;
     height: 100px;
     margin-bottom: 8px;
+  }
+
+  .card-name {
+    width: clamp(78px, 22vw, 110px);
+    margin-bottom: 20px;
   }
 
   .card {

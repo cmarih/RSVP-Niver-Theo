@@ -35,11 +35,18 @@ function App() {
 
       <div className={`card ${animate ? "fade" : ""}`}>
         {status !== "declined" && (
-          <img
-            src="/img/icone.png"
-            alt="Ícone do evento"
-            className="card-icon"
-          />
+          <>
+            <img
+              src="/img/icone.png"
+              alt="Ícone do evento"
+              className="card-icon"
+            />
+            <img
+              src="/img/nome-theo.png"
+              alt="Nome Théo"
+              className="card-name"
+            />
+          </>
         )}
         {status === "idle" && <h1>Confirmação de presença</h1>}
 
