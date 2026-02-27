@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import "./HomeScreen.css"
 import { supabase } from "../../lib/supabaseClient"
-import HeroSection from "../../components/InvitePage/HeroSection"
+import HeroSection from "../InvitePage/HeroSection"
 
 const PENDING_RSVPS_KEY = "pending-rsvps"
 

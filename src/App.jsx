@@ -1,5 +1,5 @@
 import { useState } from "react"
-import InvitePage from "./components/InvitePage/InvitePage"
+import InvitePage from "./Components/InvitePage/InvitePage"
 import HomeScreen from "./Components/HomeScreen/HomeScreen"
 import ConfirmedScreen from "./Components/ConfirmedScreen/ConfirmedScreen"
 import DeclinedScreen from "./Components/DeclinedScreen/DeclinedScreen"
