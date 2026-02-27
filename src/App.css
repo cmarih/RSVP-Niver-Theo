@@ -3,27 +3,5 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-/* Botão global para voltar ao início */
-.go-back-button {
-  margin-top: 16px;
-  padding: 10px 20px;
-  background-color: transparent;
-  color: #1d4e89;
-  border: 2px solid #1d4e89;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
-  display: block;
-  width: 100%;
-  max-width: 300px;
-  text-align: center;
-}
-
-.go-back-button:hover {
-  background-color: #1d4e89;
-  color: white;
+  font-family: "Inter", system-ui, sans-serif;
 }

@@ -1,76 +1,26 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import InvitePage from "./components/InvitePage/InvitePage"
 import HomeScreen from "./Components/HomeScreen/HomeScreen"
 import ConfirmedScreen from "./Components/ConfirmedScreen/ConfirmedScreen"
 import DeclinedScreen from "./Components/DeclinedScreen/DeclinedScreen"
-import "./App.css"
 
 function App() {
-  const [status, setStatus] = useState("idle")
+  const [status, setStatus] = useState("invite")
   const [formData, setFormData] = useState(null)
-  const [animate, setAnimate] = useState(false)
 
-  useEffect(() => {
-    setAnimate(true)
-    const timeout = setTimeout(() => {
-      setAnimate(false)
-    }, 300)
+  if (status === "form") {
+    return <HomeScreen setStatus={setStatus} setFormData={setFormData} />
+  }
 
-    return () => clearTimeout(timeout)
-  }, [status])
+  if (status === "confirmed") {
+    return <ConfirmedScreen data={formData} />
+  }
 
-  return (
-    <div className="app-container">
-      <div className="page-brand">
-        <img
-          src="/img/logo.png"
-          alt="Logo do evento"
-          className="page-logo"
-        />
-        <img
-          src="/img/astro-bot.png"
-          alt="Astro Bot"
-          className="page-astro"
-        />
-      </div>
+  if (status === "declined") {
+    return <DeclinedScreen data={formData} />
+  }
 
-      <div className={`card ${animate ? "fade" : ""}`}>
-        {status === "idle" && (
-          <>
-            <img
-              src="/img/icone.png"
-              alt="Ícone do evento"
-              className="card-icon"
-            />
-            <img
-              src="/img/nome-theo.png"
-              alt="Nome Théo"
-              className="card-name"
-            />
-          </>
-        )}
-        {status === "idle" && <h1>Confirmação de presença</h1>}
-
-        {status === "idle" && (
-          <HomeScreen
-            setStatus={setStatus}
-            setFormData={setFormData}
-          />
-        )}
-
-        {status === "confirmed" && (
-          <ConfirmedScreen
-            data={formData}
-          />
-        )}
-
-        {status === "declined" && (
-          <DeclinedScreen
-            data={formData}
-          />
-        )}
-      </div>
-    </div>
-  )
+  return <InvitePage onConfirmPresence={() => setStatus("form")} />
 }
 
 export default App

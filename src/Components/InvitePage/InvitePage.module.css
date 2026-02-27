@@ -1,0 +1,173 @@
+.page {
+  position: relative;
+  min-height: 100dvh;
+  padding: 7rem 1rem 1.5rem;
+  overflow: clip;
+  background-color: #080c14;
+  background-image: radial-gradient(circle at 20% 10%, rgba(22, 41, 77, 0.85) 0%, rgba(11, 15, 26, 0.9) 45%, rgba(6, 9, 19, 0.95) 100%),
+    url("/img/fundo-1.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  isolation: isolate;
+}
+
+.content {
+  position: relative;
+  z-index: 3;
+  width: min(68rem, 100%);
+  margin-inline: auto;
+  display: grid;
+  gap: 1.2rem;
+}
+
+.starLayer,
+.starLayerSecondary {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.starLayer {
+  background-image: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.72) 0 1px, transparent 1px),
+    radial-gradient(circle at 35% 80%, rgba(173, 225, 255, 0.85) 0 1px, transparent 1px),
+    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.7) 0 1px, transparent 1px),
+    radial-gradient(circle at 60% 60%, rgba(152, 206, 255, 0.72) 0 1px, transparent 1px),
+    radial-gradient(circle at 90% 85%, rgba(255, 255, 255, 0.75) 0 1px, transparent 1px);
+  animation: twinkleA 7s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+.starLayerSecondary {
+  opacity: 0.52;
+  background-image: radial-gradient(circle at 20% 35%, rgba(255, 255, 255, 0.8) 0 1px, transparent 1px),
+    radial-gradient(circle at 56% 14%, rgba(177, 226, 255, 0.9) 0 1px, transparent 1px),
+    radial-gradient(circle at 74% 73%, rgba(255, 255, 255, 0.8) 0 1px, transparent 1px),
+    radial-gradient(circle at 42% 52%, rgba(160, 211, 255, 0.9) 0 1px, transparent 1px);
+  animation: twinkleB 11s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+.decorative {
+  position: absolute;
+  z-index: 2;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.pageLogo {
+  position: absolute;
+  top: 0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: min(35vw, 130px);
+  height: auto;
+  opacity: 0.5;
+  filter: drop-shadow(0 0 0.5rem rgba(111, 236, 255, 0.3));
+}
+
+.planetA {
+  top: 8%;
+  right: -2.5rem;
+  width: 6rem;
+  height: 6rem;
+  background: radial-gradient(circle at 35% 35%, #ffbf6a, #df6c39 66%, #7c3440 100%);
+  box-shadow: 0 0 1.2rem rgba(255, 130, 70, 0.5);
+  animation: drift 9s ease-in-out infinite;
+}
+
+.planetB {
+  bottom: 14%;
+  left: -2rem;
+  width: 4.7rem;
+  height: 4.7rem;
+  background: radial-gradient(circle at 35% 30%, #95f2ff, #5b73ff 62%, #2f3a8e 100%);
+  box-shadow: 0 0 1rem rgba(91, 115, 255, 0.52);
+  animation: drift 7s ease-in-out infinite reverse;
+}
+
+.asteroid {
+  top: 34%;
+  left: 12%;
+  width: 2rem;
+  height: 2rem;
+  background: radial-gradient(circle at 45% 35%, #a9a7c8, #656288 72%, #4a4469 100%);
+  transform: rotate(15deg);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes twinkleA {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 0.9;
+  }
+}
+
+@keyframes twinkleB {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 0.65;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: rotate(15deg) scale(1);
+  }
+  50% {
+    transform: rotate(15deg) scale(1.08);
+  }
+}
+
+@media (min-width: 28rem) {
+  .page {
+    padding: 7.5rem 1.5rem 2rem;
+  }
+
+  .content {
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  .page {
+    padding: 8rem 2rem 2.5rem;
+    background-image: radial-gradient(circle at 20% 10%, rgba(22, 41, 77, 0.85) 0%, rgba(11, 15, 26, 0.9) 45%, rgba(6, 9, 19, 0.95) 100%),
+      url("/img/fundo-2.png");
+  }
+
+  .content {
+    gap: 2.5rem;
+  }
+
+  .pageLogo {
+    top: 1rem;
+    width: min(30vw, 160px);
+  }
+
+  .planetA {
+    right: 4%;
+  }
+
+  .planetB {
+    left: 3%;
+  }
+}

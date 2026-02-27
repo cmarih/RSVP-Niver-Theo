@@ -1,0 +1,61 @@
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.4rem;
+  width: 100%;
+  max-width: 16rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 0.55rem 1rem;
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+}
+
+.button span {
+  position: relative;
+  z-index: 1;
+}
+
+.button:hover {
+  transform: scale(1.03);
+}
+
+.button:focus-visible {
+  outline: 2px solid #6df4ff;
+  outline-offset: 3px;
+}
+
+.primary {
+  color: #07111f;
+  background: linear-gradient(135deg, #69f1ff 0%, #6bc6ff 100%);
+  box-shadow: 0 0 1rem rgba(105, 241, 255, 0.7), 0 0 2.2rem rgba(89, 155, 255, 0.42);
+}
+
+.primary:hover {
+  box-shadow: 0 0 1.25rem rgba(105, 241, 255, 0.9), 0 0 2.7rem rgba(89, 155, 255, 0.52);
+}
+
+.secondary {
+  color: #c7eaff;
+  background: rgba(13, 27, 47, 0.6);
+  border-color: rgba(109, 244, 255, 0.55);
+  box-shadow: 0 0 0.85rem rgba(109, 244, 255, 0.35);
+}
+
+.secondary:hover {
+  box-shadow: 0 0 1.15rem rgba(109, 244, 255, 0.5);
+}
+
+@media (min-width: 48rem) {
+  .button {
+    font-size: 0.86rem;
+  }
+}

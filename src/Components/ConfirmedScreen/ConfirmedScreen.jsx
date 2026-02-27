@@ -6,32 +6,36 @@ function ConfirmedScreen({ data }) {
   }
 
   return (
-    <div className="confirmed-content">
-      <img
-        src="/img/avatar.png"
-        alt="Avatar Théo"
-        className="declined-image"
-      />
-      <h2 className="confirmed-title">
-        Presença confirmada! 🎉
-      </h2>
+    <div className="confirmed-page">
+      <div className="star-layer" aria-hidden="true" />
+      <div className="confirmed-content">
+        <img
+          src="/img/avatar.png"
+          alt="Avatar Théo"
+          className="confirmed-image"
+          decoding="async"
+        />
+        <h2 className="confirmed-title">
+          Presença confirmada! 🎉
+        </h2>
 
-      {data && (
-        <div className="confirmed-details">
-          <p>Nome: {data.name}</p>
-          <p>Adultos: {data.adults ?? data.guests ?? 0}</p>
-          <p>Crianças: {data.children ?? 0}</p>
-          <p>Total de acompanhantes: {data.guests ?? 0}</p>
-        </div>
-      )}
+        {data && (
+          <div className="confirmed-details">
+            <p>Nome: <strong>{data.name}</strong></p>
+            <p>Adultos: <strong>{data.adults ?? data.guests ?? 0}</strong></p>
+            <p>Crianças: <strong>{data.children ?? 0}</strong></p>
+            <p>Total de acompanhantes: <strong>{data.guests ?? 0}</strong></p>
+          </div>
+        )}
 
-      <button onClick={handleAddToCalendar} className="submit-button confirmed-agenda-button">
-        Adicionar na agenda 📅
-      </button>
-      
-      <button onClick={handleGoBack} className="go-back-button">
-        🏠 Voltar ao início
-      </button>
+        <button onClick={handleAddToCalendar} className="agenda-button">
+          Adicionar na agenda 📅
+        </button>
+        
+        <button onClick={handleGoBack} className="go-back-button">
+          🏠 Voltar ao início
+        </button>
+      </div>
     </div>
   )
 }

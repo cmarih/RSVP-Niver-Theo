@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import "./HomeScreen.css"
 import { supabase } from "../../lib/supabaseClient"
+import HeroSection from "../../components/InvitePage/HeroSection"
 
 const PENDING_RSVPS_KEY = "pending-rsvps"
 
@@ -290,17 +291,25 @@ function HomeScreen({ setStatus, setFormData }) {
     !hasExistingRsvp // Bloquear se já tem confirmação
 
   return (
-  <form onSubmit={handleSubmit} className="form-container">
-    <input
-      type="text"
-      placeholder="Seu nome completo"
-      value={name}
-      onChange={(e) => setName(e.target.value)}
-      className="input"
-      maxLength="100"
-      required
-      autoComplete="name"
+  <div className="home-page">
+    <div className="star-layer" aria-hidden="true" />
+    <img 
+      src="/img/logo.png" 
+      alt="Logo" 
+      className="home-logo"
     />
+    <HeroSection showSubtitle={false} />
+    <form onSubmit={handleSubmit} className="form-container">
+      <input
+        type="text"
+        placeholder="Seu nome completo"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="input"
+        maxLength="100"
+        required
+        autoComplete="name"
+      />
 
     {isCheckingExisting && (
       <p className="checking-existing">Verificando confirmação anterior...</p>
@@ -414,7 +423,8 @@ function HomeScreen({ setStatus, setFormData }) {
         )}
       </>
     )}
-  </form>
+    </form>
+  </div>
 )
 }
 
