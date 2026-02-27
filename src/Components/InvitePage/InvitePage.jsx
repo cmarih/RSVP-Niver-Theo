@@ -2,7 +2,7 @@ import HeroSection from "./HeroSection"
 import MissionSection from "./MissionSection"
 import styles from "./InvitePage.module.css"
 
-function InvitePage({ onConfirmPresence }) {
+function InvitePage({ onConfirmPresence, onDecline }) {
   return (
     <main className={styles.page}>
       <div className={styles.starLayer} aria-hidden="true" />
@@ -20,7 +20,7 @@ function InvitePage({ onConfirmPresence }) {
 
       <div className={styles.content}>
         <HeroSection />
-        <MissionSection onConfirmPresence={onConfirmPresence} />
+        <MissionSection onConfirmPresence={onConfirmPresence} onDecline={onDecline} />
       </div>
     </main>
   )

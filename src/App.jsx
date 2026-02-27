@@ -9,7 +9,11 @@ function App() {
   const [formData, setFormData] = useState(null)
 
   if (status === "form") {
-    return <HomeScreen setStatus={setStatus} setFormData={setFormData} />
+    return <HomeScreen setStatus={setStatus} setFormData={setFormData} declineMode={false} />
+  }
+
+  if (status === "decline-form") {
+    return <HomeScreen setStatus={setStatus} setFormData={setFormData} declineMode={true} />
   }
 
   if (status === "confirmed") {
@@ -20,7 +24,7 @@ function App() {
     return <DeclinedScreen data={formData} />
   }
 
-  return <InvitePage onConfirmPresence={() => setStatus("form")} />
+  return <InvitePage onConfirmPresence={() => setStatus("form")} onDecline={() => setStatus("decline-form")} />
 }
 
 export default App

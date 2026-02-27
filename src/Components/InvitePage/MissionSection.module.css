@@ -25,6 +25,73 @@
   margin-top: 0.5rem;
 }
 
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.declineBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.4rem;
+  width: 100%;
+  max-width: 16rem;
+  border-radius: 999px;
+  border: 1px solid rgba(150, 170, 200, 0.4);
+  padding: 0.55rem 1rem;
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #c7d8e8;
+  background: rgba(40, 55, 80, 0.6);
+  box-shadow: 0 0 0.6rem rgba(100, 130, 170, 0.25);
+  transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+}
+
+.declineBtn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 0.9rem rgba(100, 130, 170, 0.4);
+  background: rgba(50, 65, 95, 0.7);
+}
+
+.declineBtn:focus-visible {
+  outline: 2px solid #8ba3c0;
+  outline-offset: 3px;
+}
+
+.countdown {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  font-size: 0.75rem;
+  color: rgba(175, 200, 230, 0.6);
+  letter-spacing: 0.03em;
+}
+
+.countdownValue {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 500;
+  color: rgba(125, 211, 252, 0.7);
+}
+
+.countdownTitle {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 300;
+  color: rgba(125, 211, 252, 0.7);
+}
+
+.countdownSep {
+  margin: 0 0.4rem;
+  opacity: 0.4;
+}
+
 @media (min-width: 28rem) {
   .section {
     gap: 1.25rem;
@@ -34,8 +101,13 @@
     gap: 0.75rem;
   }
 
-  .cta {
-    margin-top: 0.75rem;
+  .buttonGroup {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .declineBtn {
+    font-size: 0.72rem;
   }
 }
 
@@ -50,7 +122,7 @@
     gap: 1rem;
   }
 
-  .cta {
-    margin-top: 1rem;
+  .declineBtn {
+    font-size: 0.86rem;
   }
 }

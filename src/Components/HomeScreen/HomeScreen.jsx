@@ -89,9 +89,9 @@ async function insertRsvpWithRetry(data, maxAttempts = 3) {
   throw lastError
 }
 
-function HomeScreen({ setStatus, setFormData }) {
+function HomeScreen({ setStatus, setFormData, declineMode = false }) {
   const [name, setName] = useState("")
-  const [willAttend, setWillAttend] = useState(null)
+  const [willAttend, setWillAttend] = useState(declineMode ? false : null)
   const [adultGuests, setAdultGuests] = useState("")
   const [childGuests, setChildGuests] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -290,6 +290,9 @@ function HomeScreen({ setStatus, setFormData }) {
     (willAttend === false || isGuestsValid) &&
     !hasExistingRsvp // Bloquear se já tem confirmação
 
+  // No decline mode, show submit as soon as name is filled
+  const showSubmitButton = declineMode ? (isNameFilled && !hasExistingRsvp) : shouldShowSubmit
+
   return (
   <div className="home-page">
     <div className="star-layer" aria-hidden="true" />
@@ -343,7 +346,7 @@ function HomeScreen({ setStatus, setFormData }) {
       </div>
     )}
 
-    {isNameFilled && !hasExistingRsvp && (
+    {isNameFilled && !hasExistingRsvp && !declineMode && (
       <div className="button-group">
         {willAttend !== false && (
           <button
@@ -354,18 +357,6 @@ function HomeScreen({ setStatus, setFormData }) {
             }`}
           >
             Confirmar presença
-          </button>
-        )}
-
-        {willAttend !== true && (
-          <button
-            type="button"
-            onClick={() => setWillAttend(false)}
-            className={`button ${
-              willAttend === false ? "active-decline" : ""
-            }`}
-          >
-            Não poderei ir
           </button>
         )}
       </div>
@@ -396,7 +387,7 @@ function HomeScreen({ setStatus, setFormData }) {
       </div>
     )}
 
-    {willAttend !== null && !hasExistingRsvp && (
+    {willAttend !== null && !hasExistingRsvp && !declineMode && (
       <button
         type="button"
         className="change-option-button"
@@ -410,11 +401,20 @@ function HomeScreen({ setStatus, setFormData }) {
       </button>
     )}
 
-    {shouldShowSubmit && (
+    {showSubmitButton && (
       <>
         <button type="submit" className="submit-button" disabled={isSubmitting}>
           {isSubmitting ? "Enviando..." : "Enviar"}
         </button>
+        {declineMode && (
+          <button 
+            type="button" 
+            className="back-button"
+            onClick={() => setStatus("invite")}
+          >
+            Voltar
+          </button>
+        )}
         {submitInfo && (
           <p className="submit-info">{submitInfo}</p>
         )}
