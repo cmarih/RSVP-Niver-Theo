@@ -21,7 +21,6 @@
 }
 
 .cta {
-  align-self: center;
   margin-top: 0.5rem;
 }
 
@@ -29,6 +28,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem;
 }
 
@@ -103,6 +103,7 @@
 
   .buttonGroup {
     flex-direction: row;
+    justify-content: center;
     gap: 1rem;
   }
 
