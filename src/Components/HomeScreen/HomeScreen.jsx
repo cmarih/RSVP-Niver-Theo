@@ -156,7 +156,7 @@ function HomeScreen({ setStatus, setFormData, declineMode = false }) {
       return false
     }
     
-    if (trimmedName.length > 20) {
+    if (trimmedName.length > 40) {
       setSubmitError("Nome muito longo. Use no máximo 20 caracteres.")
       return false
     }
@@ -171,8 +171,8 @@ function HomeScreen({ setStatus, setFormData, declineMode = false }) {
         return false
       }
 
-      if (totalGuests < 1 || totalGuests > 4) {
-        setSubmitError("Total de acompanhantes (adultos + crianças) deve estar entre 1 e 4.")
+      if (totalGuests < 1 || totalGuests > 6) {
+        setSubmitError("Total de acompanhantes (adultos + crianças) deve estar entre 1 e 6.")
         return false
       }
     }
@@ -281,7 +281,7 @@ function HomeScreen({ setStatus, setFormData, declineMode = false }) {
 
   const isNameFilled = name.trim() !== ""
   const totalGuests = Number(adultGuests || 0) + Number(childGuests || 0)
-  const isGuestsValid = totalGuests > 0 && totalGuests <= 4
+  const isGuestsValid = totalGuests > 0 && totalGuests <= 7
   const hasExistingRsvp = existingRsvp !== null
 
   const shouldShowSubmit =

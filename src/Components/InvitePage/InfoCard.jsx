@@ -7,7 +7,15 @@ function InfoCard({ items }) {
         {items.map((item) => (
           <div className={styles.row} key={item.label}>
             <h3 className={styles.label}>{item.label}</h3>
-            <p className={styles.value}>{item.value}</p>
+            <p className={styles.value}>
+              {item.link ? (
+                <a href={item.link} target="_blank" rel="noopener noreferrer">
+                  {item.value}
+                </a>
+              ) : (
+                item.value
+              )}
+            </p>
           </div>
         ))}
       </div>

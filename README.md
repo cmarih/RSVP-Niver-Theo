@@ -1,16 +1,29 @@
 # RSVP Aniversário do Théo 🚀
 
-Este projeto é um formulário de confirmação de presença para o aniversário do meu filho, com tema Astro Bot.
+Site interativo de confirmação de presença para o aniversário do Théo, com tema Astro Bot. 
 
-Sistema completo de RSVP com prevenção de duplicatas, validações de segurança e interface intuitiva para os convidados confirmarem presença de forma segura e organizada.
+Sistema completo de RSVP com página de convite, prevenção de duplicatas, validações de segurança e interface imersiva com design espacial para tornar o convite memorável e funcional.
 
 ## 🎯 Objetivo
 
+- Apresentar o convite de forma atrativa com tema espacial/Astro Bot
 - Permitir que os convidados confirmem presença **apenas uma vez** por nome
 - Registrar quem vai comparecer, separando quantos adultos e crianças irão
 - Registrar também quem não poderá ir
+- Facilitar acesso à localização do evento via Google Maps
 
 ## ✨ Funcionalidades Implementadas
+
+### 🎨 **Página de Convite Interativa (Nova!)**
+- **HeroSection**: Tela de boas-vindas com animações e tema espacial
+- **MissionSection**: Card informativo com:
+  - Data do evento (26 de Abril de 2026)
+  - Horário (16h00)
+  - Local com **link direto para Google Maps** (clique no endereço)
+  - **Contagem regressiva em tempo real** (dias, horas e minutos)
+  - Botões de ação: "Confirmar Presença" e "Não poderei ir"
+- **Design espacial imersivo**: Estrelas animadas, planetas decorativos, logo personalizada
+- **Layout responsivo**: Adapta perfeitamente de mobile a desktop
 
 ### 🔍 **Sistema Inteligente de Verificação**
 - **Verificação automática**: Ao digitar o nome, sistema verifica se já existe confirmação
@@ -33,31 +46,48 @@ Sistema completo de RSVP com prevenção de duplicatas, validações de seguran�
 
 ### 📱 **Fluxos de Experiência**
 
+#### 🎬 **Fluxo Completo (Novo com Página de Convite):**
+```
+1. Página de Convite → Visualiza info do evento + contagem regressiva
+2. Clica "Confirmar Presença" ou "Não poderei ir"
+3. Formulário → Digite nome
+4. Sistema verifica duplicatas automaticamente
+5. Se novo: Escolhe adultos/crianças → Confirma
+6. Tela de sucesso → Adicionar na agenda → Voltar ao início
+```
+
 #### 1️⃣ **Primeira confirmação:**
 ```
-Digite nome → Não existe → Escolha presença → Confirma adultos/crianças → Sucesso
+Convite → Digite nome → Não existe → Escolha presença → Confirma adultos/crianças → Sucesso
 ```
 
 #### 2️⃣ **Nome já confirmado:**
 ```
-Digite nome → Já existe → Mostra confirmação atual → "Entre em contato para alterar"
+Convite → Digite nome → Já existe → Mostra confirmação atual → "Entre em contato para alterar"
 ```
 
 #### 3️⃣ **Pós-confirmação:**
 ```
-Tela de sucesso → Adicionar na agenda → Voltar ao início
+Tela de sucesso → Adicionar na agenda → Voltar ao início (retorna ao convite)
 ```
 
 ### 🎉 **Funcionalidades da Interface**
-- Tela inicial com validação em tempo real
-- Fluxo condicional baseado na resposta
-- Campo de acompanhantes dividido em:
-  - quantidade de adultos
-  - quantidade de crianças
-- Tela de confirmação com opção de adicionar evento na agenda (.ics para desktop, Google Calendar para mobile)
-- Tela de recusa com feedback amigável
-- Layout responsivo com identidade visual Astro Bot
-- Animações suaves entre transições
+- **Página de convite inicial** com design espacial e tema Astro Bot
+- **Informações do evento** em card interativo com:
+  - Link clicável para Google Maps (abre em nova aba)
+  - Contagem regressiva em tempo real
+  - Design com efeitos de brilho e hover
+- **Validação em tempo real** no formulário de RSVP
+- **Fluxo condicional** baseado na resposta (confirmar/declinar)
+- **Campo de acompanhantes dividido** em:
+  - Quantidade de adultos (0-4)
+  - Quantidade de crianças (0-4)
+  - Total entre 1-4 pessoas
+- **Tela de confirmação** com opção de adicionar evento na agenda (.ics para desktop, Google Calendar para mobile)
+- **Tela de recusa** com feedback amigável
+- **Layout totalmente responsivo** com identidade visual consistente
+- **Animações suaves** entre transições de tela
+- **Acessibilidade**: aria-labels, semântica HTML correta
 
 ### 📐 **Ajustes recentes de layout (mobile)**
 - Scroll vertical habilitado em telas menores para evitar corte de conteúdo
@@ -68,24 +98,44 @@ Tela de sucesso → Adicionar na agenda → Voltar ao início
 ## 🏗️ Stack Técnica
 
 - **Frontend**: React 19.2 + Vite 7.3
-- **Estilização**: CSS modular + estilos globais
+- **Estilização**: CSS Modules + estilos globais + animações CSS
 - **Backend**: Supabase (PostgreSQL + Real-time + Auth)
-- **Validação**: Frontend + Database constraints + RLS policies
-- **Deploy**: Pronto para Vercel/Netlify
+- **Validação**: Frontend (React state + debounce) + Database (constraints + RLS policies)
+- **Integração**: Google Maps API (Search), iCalendar (.ics), Google Calendar
+- **Gerenciamento de Estado**: React Hooks (useState, useEffect)
+- **Deploy**: Pronto para Vercel/Netlify/GitHub Pages
 
 ## 📁 Estrutura do Projeto
 
 ```
 src/
-├── App.jsx                    # Controle de estado principal e navegação
-├── App.css                   # Estilos globais e botões padronizados
+├── App.jsx                    # Controle de estado principal e navegação entre telas
+├── App.css                    # Estilos globais e botões padronizados
 ├── Components/
-│   ├── HomeScreen/           # Formulário principal + validação
-│   ├── ConfirmedScreen/      # Tela de sucesso + agenda
-│   └── DeclinedScreen/       # Tela de recusa
+│   ├── InvitePage/            # Página de convite inicial (NOVO!)
+│   │   ├── InvitePage.jsx           # Container principal com bg espacial
+│   │   ├── InvitePage.module.css    # Estilos da página (estrelas, planetas)
+│   │   ├── HeroSection.jsx          # Seção hero com boas-vindas
+│   │   ├── HeroSection.module.css   # Estilos do hero
+│   │   ├── MissionSection.jsx       # Card de info com contador e botões
+│   │   ├── MissionSection.module.css # Estilos do card de informações
+│   │   ├── InfoCard.jsx             # Card reutilizável (data, hora, local)
+│   │   ├── InfoCard.module.css      # Estilos do card info
+│   │   ├── Button.jsx               # Botão customizado
+│   │   └── Button.module.css        # Estilos do botão
+│   ├── HomeScreen/            # Formulário principal + validação de duplicatas
+│   │   ├── HomeScreen.jsx
+│   │   └── HomeScreen.css
+│   ├── ConfirmedScreen/       # Tela de sucesso + botão agenda
+│   │   ├── ConfirmedScreen.jsx
+│   │   └── ConfirmedScreen.css
+│   └── DeclinedScreen/        # Tela de recusa com mensagem amigável
+│       ├── DeclinedScreen.jsx
+│       └── DeclinedScreen.css
 ├── lib/
-│   └── supabaseClient.js     # Configuração do Supabase
-└── index.css                 # Reset e estilos base
+│   └── supabaseClient.js      # Configuração do cliente Supabase
+├── index.css                  # Reset CSS e estilos base
+└── main.jsx                   # Entry point da aplicação
 ```
 
 ## ⚙️ Configuração do Supabase (PRODUÇÃO)
@@ -172,7 +222,7 @@ VITE_SUPABASE_ANON_KEY=SUA_ANON_KEY_PUBLICA
 ### **Desenvolvimento:**
 ```bash
 # Instalar dependências
-npm install
+npm install --legacy-peer-deps
 
 # Configurar .env com credenciais do Supabase
 cp .env.example .env
@@ -181,6 +231,8 @@ cp .env.example .env
 # Executar aplicação
 npm run dev
 ```
+
+> **Nota**: Usamos `--legacy-peer-deps` devido a conflitos de peer dependencies entre ESLint 10 e plugins React.
 
 ### **Produção:**
 ```bash
@@ -263,16 +315,47 @@ Na aba **Table Editor** → **rsvps**:
 - [ ] ✅ Domínio/URL de produção configurado
 - [ ] ✅ Teste de fluxo completo em produção
 
+## 🔧 Troubleshooting
+
+### **Erro: "VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY não configuradas"**
+- **Solução**: Crie o arquivo `.env` na raiz do projeto com suas credenciais do Supabase
+- Veja a seção "Configurar variáveis de ambiente" acima
+
+### **Erro: "vite não é reconhecido como comando"**
+- **Solução**: Rode `npm install --legacy-peer-deps` para instalar as dependências
+
+### **Erro: "In HTML, <h3> cannot be a descendant of <p>"**
+- **Solução**: Já corrigido! Usamos `<div>` ao invés de `<p>` para o contador
+
+### **Erro: "npm ERR! ERESOLVE unable to resolve dependency tree"**
+- **Solução**: Use `npm install --legacy-peer-deps` ao invés de `npm install`
+
+### **Link do Google Maps não funciona**
+- **Verificar**: O link está configurado corretamente no `MissionSection.jsx`
+- O link deve abrir automaticamente em nova aba ao clicar
+
 ---
 
 ## 💡 Sobre o Projeto
 
 Este projeto combina aprendizado prático em React com um caso real de uso, implementando conceitos avançados:
 
-- **Estado complexo** com múltiplos componentes
+- **Estado complexo** com múltiplos componentes e navegação entre telas
 - **Validação robusta** frontend + backend  
 - **Segurança de produção** com RLS e constraints
-- **UX otimizada** para usuários finais
-- **Arquitetura escalável** para projetos maiores
+- **UX otimizada** para usuários finais com design imersivo
+- **Integração com APIs externas** (Google Maps, Calendar)
+- **CSS avançado** com animações, efeitos e responsividade
+- **Arquitetura modular** com componentes reutilizáveis
+- **Boas práticas** de acessibilidade e semântica HTML
 
-Ideal para demonstrar habilidades em desenvolvimento full-stack com React e Supabase! 🎯
+### 🎯 **Recursos Destacados**
+- ✅ Página de convite interativa com tema espacial
+- ✅ Link direto para Google Maps
+- ✅ Contagem regressiva em tempo real
+- ✅ Sistema anti-duplicatas
+- ✅ Validação completa de dados
+- ✅ Integração com calendários
+- ✅ Design responsivo mobile-first
+
+Ideal para demonstrar habilidades em desenvolvimento full-stack moderno com React e Supabase! 🎯🚀

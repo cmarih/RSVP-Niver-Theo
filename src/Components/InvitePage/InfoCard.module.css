@@ -47,6 +47,22 @@
   font-size: 0.62rem;
 }
 
+.value a {
+  color: #76dfff;
+  text-decoration: none;
+  transition: color 200ms ease, text-shadow 200ms ease;
+  cursor: pointer;
+}
+
+.value a:hover {
+  color: #a8ecff;
+  text-shadow: 0 0 8px rgba(118, 223, 255, 0.6);
+}
+
+.value a:active {
+  color: #5dd0ff;
+}
+
 .row:last-child {
   padding-top: 0.4rem;
   border-top: 1px solid rgba(118, 223, 255, 0.18);

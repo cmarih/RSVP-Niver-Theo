@@ -17,11 +17,7 @@ function HeroSection({ showSubtitle = true }) {
         <h1 className={styles.title}>THÉO</h1>
         <h1 className={styles.title2}>6 ANOS</h1>
       </div>
-      {showSubtitle && (
-        <p className={styles.subtitle}>
-          O Astro Théo ativou o modo festa. Preparado para jogar essa aventura?
-        </p>
-      )}
+      
     </header>
   )
 }

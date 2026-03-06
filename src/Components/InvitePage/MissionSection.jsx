@@ -29,10 +29,7 @@ function MissionSection({ onConfirmPresence, onDecline }) {
 
     return (
         <section className={styles.section} aria-labelledby="mission-title">
-            <h2 id="mission-title" className={styles.title}>
-                Iniciando sequência de diversão...
-            </h2>
-
+           
             <div className={styles.grid}>
                 <InfoCard
                     items={[
@@ -41,6 +38,7 @@ function MissionSection({ onConfirmPresence, onDecline }) {
                         {
                             label: "Local",
                             value: "Jad Salão de Festa e Eventos | R. John Lenon, 1396 - Areias, São José - SC",
+                            link: "https://www.google.com/maps/search/?api=1&query=Jad+Sal%C3%A3o+de+Festa+e+Eventos+R.+John+Lenon+1396+Areias+S%C3%A3o+Jos%C3%A9+SC"
                         },
                     ]}
                 />
@@ -66,14 +64,14 @@ function MissionSection({ onConfirmPresence, onDecline }) {
                 </button>
             </div>
                     
-            <p className={styles.countdown}>
+            <div className={styles.countdown}>
                 <h3 className={styles.countdownTitle}>Contagem regressiva...</h3>
                 <span className={styles.countdownValue}>{countdown.days}</span> dias
                 <span className={styles.countdownSep}>•</span>
                 <span className={styles.countdownValue}>{countdown.hours}</span> horas
                 <span className={styles.countdownSep}>•</span>
                 <span className={styles.countdownValue}>{countdown.minutes}</span> min
-            </p>
+            </div>
         </section>
     )
 }
