@@ -4,6 +4,8 @@ Site interativo de confirmação de presença para o aniversário do Théo, com 
 
 Sistema completo de RSVP com página de convite, prevenção de duplicatas, validações de segurança e interface imersiva com design espacial para tornar o convite memorável e funcional.
 
+[Clique aqui para visualizar no Vercel](https://aniversario-theo-astrobot.vercel.app/)
+
 ## 🎯 Objetivo
 
 - Apresentar o convite de forma atrativa com tema espacial/Astro Bot
